@@ -158,7 +158,7 @@ public class DeptServiceImpl implements DeptService {
             map.put("创建日期", deptDTO.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+        FileUtils.downloadExcel(list, response);
     }
 
     @Override

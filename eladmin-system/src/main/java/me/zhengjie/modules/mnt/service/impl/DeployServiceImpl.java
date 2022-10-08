@@ -185,7 +185,7 @@ public class DeployServiceImpl implements DeployService {
 
 	private void sleep(int second) {
 		try {
-			Thread.sleep(second * 1000);
+			Thread.sleep(second * 1000L);
 		} catch (InterruptedException e) {
 			log.error(e.getMessage(),e);
 		}
@@ -198,7 +198,7 @@ public class DeployServiceImpl implements DeployService {
 		sb.append("mkdir -p ").append(backupPath);
 		sb.append("mv -f ").append(fileSavePath);
 		sb.append(appName).append(" ").append(backupPath);
-		log.info("备份应用脚本:" + sb.toString());
+		log.info("备份应用脚本: {}", sb);
 		executeShellUtil.execute(sb.toString());
 		//还原信息入库
 		DeployHistory deployHistory = new DeployHistory();
@@ -425,6 +425,6 @@ public class DeployServiceImpl implements DeployService {
 			map.put("部署日期", deployDto.getCreateTime());
 			list.add(map);
 		}
-		FileUtil.downloadExcel(list, response);
+		FileUtils.downloadExcel(list, response);
 	}
 }

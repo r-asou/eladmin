@@ -113,7 +113,7 @@ public class JobServiceImpl implements JobService {
             map.put("创建日期", jobDTO.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+        FileUtils.downloadExcel(list, response);
     }
 
     @Override

@@ -139,7 +139,7 @@ public class OnlineUserService {
             map.put("登录日期", user.getLoginTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+        FileUtils.downloadExcel(list, response);
     }
 
     /**

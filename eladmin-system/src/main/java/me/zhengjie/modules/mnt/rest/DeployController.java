@@ -23,7 +23,7 @@ import me.zhengjie.modules.mnt.domain.Deploy;
 import me.zhengjie.modules.mnt.domain.DeployHistory;
 import me.zhengjie.modules.mnt.service.DeployService;
 import me.zhengjie.modules.mnt.service.dto.DeployQueryCriteria;
-import me.zhengjie.utils.FileUtil;
+import me.zhengjie.utils.FileUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +50,7 @@ import java.util.Set;
 @RequestMapping("/api/deploy")
 public class DeployController {
 
-	private final String fileSavePath = FileUtil.getTmpDirPath()+"/";
+	private final String fileSavePath = FileUtils.getTmpDirPath()+"/";
     private final DeployService deployService;
 
 
@@ -105,7 +105,7 @@ public class DeployController {
 		if(file != null){
 			fileName = file.getOriginalFilename();
 			File deployFile = new File(fileSavePath+fileName);
-			FileUtil.del(deployFile);
+			FileUtils.del(deployFile);
 			file.transferTo(deployFile);
 			//文件下一步要根据文件名字来
 			deployService.deploy(fileSavePath+fileName ,id);

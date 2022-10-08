@@ -29,14 +29,11 @@ import me.zhengjie.domain.QiniuConfig;
 import me.zhengjie.domain.QiniuContent;
 import me.zhengjie.repository.QiniuContentRepository;
 import me.zhengjie.service.dto.QiniuQueryCriteria;
-import me.zhengjie.utils.QiNiuUtil;
+import me.zhengjie.utils.*;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.repository.QiNiuConfigRepository;
 import me.zhengjie.service.QiNiuService;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
-import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
@@ -96,7 +93,7 @@ public class QiNiuServiceImpl implements QiNiuService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public QiniuContent upload(MultipartFile file, QiniuConfig qiniuConfig) {
-        FileUtil.checkSize(maxSize, file.getSize());
+        FileUtils.checkSize(maxSize, file.getSize());
         if(qiniuConfig.getId() == null){
             throw new BadRequestException("请先添加相应配置，再操作");
         }
@@ -114,16 +111,16 @@ public class QiNiuServiceImpl implements QiNiuService {
             //解析上传成功的结果
 
             DefaultPutRet putRet = JSON.parseObject(response.bodyString(), DefaultPutRet.class);
-            QiniuContent content = qiniuContentRepository.findByKey(FileUtil.getFileNameNoEx(putRet.key));
+            QiniuContent content = qiniuContentRepository.findByKey(FileUtils.getFileNameNoEx(putRet.key));
             if(content == null){
                 //存入数据库
                 QiniuContent qiniuContent = new QiniuContent();
-                qiniuContent.setSuffix(FileUtil.getExtensionName(putRet.key));
+                qiniuContent.setSuffix(FileUtils.getExtensionName(putRet.key));
                 qiniuContent.setBucket(qiniuConfig.getBucket());
                 qiniuContent.setType(qiniuConfig.getType());
-                qiniuContent.setKey(FileUtil.getFileNameNoEx(putRet.key));
+                qiniuContent.setKey(FileUtils.getFileNameNoEx(putRet.key));
                 qiniuContent.setUrl(qiniuConfig.getHost()+"/"+putRet.key);
-                qiniuContent.setSize(FileUtil.getSize(Integer.parseInt(file.getSize()+"")));
+                qiniuContent.setSize(FileUtils.getSize(Integer.parseInt(file.getSize()+"")));
                 return qiniuContentRepository.save(qiniuContent);
             }
             return content;
@@ -192,11 +189,11 @@ public class QiNiuServiceImpl implements QiNiuService {
             QiniuContent qiniuContent;
             FileInfo[] items = fileListIterator.next();
             for (FileInfo item : items) {
-                if(qiniuContentRepository.findByKey(FileUtil.getFileNameNoEx(item.key)) == null){
+                if(qiniuContentRepository.findByKey(FileUtils.getFileNameNoEx(item.key)) == null){
                     qiniuContent = new QiniuContent();
-                    qiniuContent.setSize(FileUtil.getSize(Integer.parseInt(item.fsize+"")));
-                    qiniuContent.setSuffix(FileUtil.getExtensionName(item.key));
-                    qiniuContent.setKey(FileUtil.getFileNameNoEx(item.key));
+                    qiniuContent.setSize(FileUtils.getSize(Integer.parseInt(item.fsize+"")));
+                    qiniuContent.setSuffix(FileUtils.getExtensionName(item.key));
+                    qiniuContent.setKey(FileUtils.getFileNameNoEx(item.key));
                     qiniuContent.setType(config.getType());
                     qiniuContent.setBucket(config.getBucket());
                     qiniuContent.setUrl(config.getHost()+"/"+item.key);
@@ -232,6 +229,6 @@ public class QiNiuServiceImpl implements QiNiuService {
             map.put("创建日期", content.getUpdateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+        FileUtils.downloadExcel(list, response);
     }
 }

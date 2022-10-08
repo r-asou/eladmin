@@ -25,7 +25,7 @@ import me.zhengjie.modules.mnt.service.DatabaseService;
 import me.zhengjie.modules.mnt.service.dto.DatabaseDto;
 import me.zhengjie.modules.mnt.service.dto.DatabaseQueryCriteria;
 import me.zhengjie.modules.mnt.util.SqlUtils;
-import me.zhengjie.utils.FileUtil;
+import me.zhengjie.utils.FileUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +49,7 @@ import java.util.Set;
 @RequestMapping("/api/database")
 public class DatabaseController {
 
-	private final String fileSavePath = FileUtil.getTmpDirPath()+"/";
+	private final String fileSavePath = FileUtils.getTmpDirPath()+"/";
     private final DatabaseService databaseService;
 
 	@ApiOperation("导出数据库数据")
@@ -112,7 +112,7 @@ public class DatabaseController {
 		if(database != null){
 			fileName = file.getOriginalFilename();
 			File executeFile = new File(fileSavePath+fileName);
-			FileUtil.del(executeFile);
+			FileUtils.del(executeFile);
 			file.transferTo(executeFile);
 			String result = SqlUtils.executeFile(database.getJdbcUrl(), database.getUserName(), database.getPwd(), executeFile);
 			return new ResponseEntity<>(result,HttpStatus.OK);

@@ -199,21 +199,21 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     public Map<String, String> updateAvatar(MultipartFile multipartFile) {
         // 文件大小验证
-        FileUtil.checkSize(properties.getAvatarMaxSize(), multipartFile.getSize());
+        FileUtils.checkSize(properties.getAvatarMaxSize(), multipartFile.getSize());
         // 验证文件上传的格式
         String image = "gif jpg png jpeg";
-        String fileType = FileUtil.getExtensionName(multipartFile.getOriginalFilename());
+        String fileType = FileUtils.getExtensionName(multipartFile.getOriginalFilename());
         if(fileType != null && !image.contains(fileType)){
             throw new BadRequestException("文件格式错误！, 仅支持 " + image +" 格式");
         }
         User user = userRepository.findByUsername(SecurityUtils.getCurrentUsername());
         String oldPath = user.getAvatarPath();
-        File file = FileUtil.upload(multipartFile, properties.getPath().getAvatar());
+        File file = FileUtils.upload(multipartFile, properties.getPath().getAvatar());
         user.setAvatarPath(Objects.requireNonNull(file).getPath());
         user.setAvatarName(file.getName());
         userRepository.save(user);
         if (StringUtils.isNotBlank(oldPath)) {
-            FileUtil.del(oldPath);
+            FileUtils.del(oldPath);
         }
         @NotBlank String username = user.getUsername();
         flushCache(username);
@@ -246,7 +246,7 @@ public class UserServiceImpl implements UserService {
             map.put("创建日期", userDTO.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+        FileUtils.downloadExcel(list, response);
     }
 
     /**

@@ -26,7 +26,7 @@ import me.zhengjie.exception.EntityExistException;
     </#list>
 </#if>
 import me.zhengjie.utils.ValidationUtil;
-import me.zhengjie.utils.FileUtil;
+import me.zhengjie.utils.FileUtils;
 import lombok.RequiredArgsConstructor;
 import ${package}.repository.${className}Repository;
 import ${package}.service.${className}Service;

@@ -3,10 +3,10 @@ package me.zhengjie.utils;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
 
-import static me.zhengjie.utils.FileUtil.*;
+import static me.zhengjie.utils.FileUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FileUtilTest {
+public class FileUtilsTest {
 
     @Test
     public void testToFile() {

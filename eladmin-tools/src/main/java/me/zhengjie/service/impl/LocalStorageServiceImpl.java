@@ -72,26 +72,26 @@ public class LocalStorageServiceImpl implements LocalStorageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public LocalStorage create(String name, MultipartFile multipartFile) {
-        FileUtil.checkSize(properties.getMaxSize(), multipartFile.getSize());
-        String suffix = FileUtil.getExtensionName(multipartFile.getOriginalFilename());
-        String type = FileUtil.getFileType(suffix);
-        File file = FileUtil.upload(multipartFile, properties.getPath().getPath() + type +  File.separator);
+        FileUtils.checkSize(properties.getMaxSize(), multipartFile.getSize());
+        String suffix = FileUtils.getExtensionName(multipartFile.getOriginalFilename());
+        String type = FileUtils.getFileType(suffix);
+        File file = FileUtils.upload(multipartFile, properties.getPath().getPath() + type +  File.separator);
         if(ObjectUtil.isNull(file)){
             throw new BadRequestException("上传失败");
         }
         try {
-            name = StringUtils.isBlank(name) ? FileUtil.getFileNameNoEx(multipartFile.getOriginalFilename()) : name;
+            name = StringUtils.isBlank(name) ? FileUtils.getFileNameNoEx(multipartFile.getOriginalFilename()) : name;
             LocalStorage localStorage = new LocalStorage(
                     file.getName(),
                     name,
                     suffix,
                     file.getPath(),
                     type,
-                    FileUtil.getSize(multipartFile.getSize())
+                    FileUtils.getSize(multipartFile.getSize())
             );
             return localStorageRepository.save(localStorage);
         }catch (Exception e){
-            FileUtil.del(file);
+            FileUtils.del(file);
             throw e;
         }
     }
@@ -110,7 +110,7 @@ public class LocalStorageServiceImpl implements LocalStorageService {
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
             LocalStorage storage = localStorageRepository.findById(id).orElseGet(LocalStorage::new);
-            FileUtil.del(storage.getPath());
+            FileUtils.del(storage.getPath());
             localStorageRepository.delete(storage);
         }
     }
@@ -128,6 +128,6 @@ public class LocalStorageServiceImpl implements LocalStorageService {
             map.put("创建日期", localStorageDTO.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+        FileUtils.downloadExcel(list, response);
     }
 }

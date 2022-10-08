@@ -18,7 +18,7 @@ package me.zhengjie.modules.system.service.impl;
 import cn.hutool.core.date.BetweenFormatter.Level;
 import cn.hutool.core.date.DateUtil;
 import me.zhengjie.modules.system.service.MonitorService;
-import me.zhengjie.utils.FileUtil;
+import me.zhengjie.utils.FileUtils;
 import me.zhengjie.utils.StringUtils;
 import me.zhengjie.utils.enums.Constants;
 import org.springframework.stereotype.Service;
@@ -81,7 +81,8 @@ public class MonitorServiceImpl implements MonitorService {
         FileSystem fileSystem = os.getFileSystem();
         List<OSFileStore> fsArray = fileSystem.getFileStores();
         String osName = System.getProperty("os.name");
-        long available = 0, total = 0;
+        long available = 0;
+        long total = 0;
         for (OSFileStore fs : fsArray){
             // windows 需要将所有磁盘分区累加，linux 和 mac 直接累加会出现磁盘重复的问题，待修复
             if(osName.toLowerCase().startsWith(Constants.WIN)) {
@@ -94,9 +95,9 @@ public class MonitorServiceImpl implements MonitorService {
             }
         }
         long used = total - available;
-        diskInfo.put(TOTAL, total > 0 ? FileUtil.getSize(total) : "?");
-        diskInfo.put(AVAILABLE, FileUtil.getSize(available));
-        diskInfo.put(USED, FileUtil.getSize(used));
+        diskInfo.put(TOTAL, total > 0 ? FileUtils.getSize(total) : "?");
+        diskInfo.put(AVAILABLE, FileUtils.getSize(available));
+        diskInfo.put(USED, FileUtils.getSize(used));
         if(total != 0){
             diskInfo.put(USAGE_RATE, df.format(used/(double)total * 100));
         } else {

@@ -191,7 +191,7 @@ public class RoleServiceImpl implements RoleService {
             map.put("创建日期", role.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+        FileUtils.downloadExcel(list, response);
     }
 
     @Override

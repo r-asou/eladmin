@@ -19,7 +19,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.util.StringUtils;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import me.zhengjie.utils.CloseUtil;
+import me.zhengjie.utils.CloseUtils;
 import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.File;
@@ -100,7 +100,7 @@ public class SqlUtils {
 			log.error("create connection error, jdbcUrl: {}", jdbcUrl);
 			throw new RuntimeException("create connection error, jdbcUrl: " + jdbcUrl);
 		} finally {
-			CloseUtil.close(connection);
+			CloseUtils.close(connection);
 		}
 		return connection;
 	}
@@ -164,7 +164,7 @@ public class SqlUtils {
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		} finally {
-			CloseUtil.close(st);
+			CloseUtils.close(st);
 		}
 	}
 

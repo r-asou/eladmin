@@ -46,7 +46,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     /**
      * 注入bean
      */
-    private final static Ip2regionSearcher IP_SEARCHER = SpringContextHolder.getBean(Ip2regionSearcher.class);
+    private static final Ip2regionSearcher IP_SEARCHER = SpringContextHolder.getBean(Ip2regionSearcher.class);
 
 
     private static final UserAgentAnalyzer USER_AGENT_ANALYZER = UserAgentAnalyzer

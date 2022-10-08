@@ -328,7 +328,7 @@ public class MenuServiceImpl implements MenuService {
             map.put("创建日期", menuDTO.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+        FileUtils.downloadExcel(list, response);
     }
 
     private void updateSubCnt(Long menuId){

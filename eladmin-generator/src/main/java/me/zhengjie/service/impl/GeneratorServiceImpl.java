@@ -25,7 +25,7 @@ import me.zhengjie.domain.vo.TableInfo;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.repository.ColumnInfoRepository;
 import me.zhengjie.service.GeneratorService;
-import me.zhengjie.utils.FileUtil;
+import me.zhengjie.utils.FileUtils;
 import me.zhengjie.utils.GenUtil;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.StringUtils;
@@ -197,7 +197,7 @@ public class GeneratorServiceImpl implements GeneratorService {
             File file = new File(GenUtil.download(columns, genConfig));
             String zipPath = file.getPath() + ".zip";
             ZipUtil.zip(file.getPath(), zipPath);
-            FileUtil.downloadFile(request, response, new File(zipPath), true);
+            FileUtils.downloadFile(request, response, new File(zipPath), true);
         } catch (IOException e) {
             throw new BadRequestException("打包失败");
         }

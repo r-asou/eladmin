@@ -23,8 +23,9 @@ import java.io.Closeable;
  * @description 用于关闭各种连接，缺啥补啥
  * @date 2021-03-05
  **/
-public class CloseUtil {
+public class CloseUtils {
 
+    private CloseUtils(){}
     public static void close(Closeable closeable) {
         if (null != closeable) {
             try {

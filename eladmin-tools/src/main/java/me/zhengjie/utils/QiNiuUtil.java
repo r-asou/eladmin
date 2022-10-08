@@ -63,9 +63,9 @@ public class QiNiuUtil {
     public static String getKey(String file){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         Date date = new Date();
-        return FileUtil.getFileNameNoEx(file) + "-" +
+        return FileUtils.getFileNameNoEx(file) + "-" +
                 sdf.format(date) +
                 "." +
-                FileUtil.getExtensionName(file);
+                FileUtils.getExtensionName(file);
     }
 }

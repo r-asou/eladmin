@@ -158,7 +158,7 @@ public class LogServiceImpl implements LogService {
             map.put("创建日期", log.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+        FileUtils.downloadExcel(list, response);
     }
 
     @Override

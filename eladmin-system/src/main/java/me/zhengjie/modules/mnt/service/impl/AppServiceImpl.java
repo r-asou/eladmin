@@ -23,7 +23,7 @@ import me.zhengjie.modules.mnt.service.AppService;
 import me.zhengjie.modules.mnt.service.dto.AppDto;
 import me.zhengjie.modules.mnt.service.dto.AppQueryCriteria;
 import me.zhengjie.modules.mnt.service.mapstruct.AppMapper;
-import me.zhengjie.utils.FileUtil;
+import me.zhengjie.utils.FileUtils;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
 import me.zhengjie.utils.ValidationUtil;
@@ -118,6 +118,6 @@ public class AppServiceImpl implements AppService {
             map.put("创建日期", appDto.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+        FileUtils.downloadExcel(list, response);
     }
 }

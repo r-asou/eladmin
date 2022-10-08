@@ -23,7 +23,7 @@ import me.zhengjie.modules.mnt.service.DeployHistoryService;
 import me.zhengjie.modules.mnt.service.dto.DeployHistoryDto;
 import me.zhengjie.modules.mnt.service.dto.DeployHistoryQueryCriteria;
 import me.zhengjie.modules.mnt.service.mapstruct.DeployHistoryMapper;
-import me.zhengjie.utils.FileUtil;
+import me.zhengjie.utils.FileUtils;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
 import me.zhengjie.utils.ValidationUtil;
@@ -91,6 +91,6 @@ public class DeployHistoryServiceImpl implements DeployHistoryService {
             map.put("部署人员", deployHistoryDto.getDeployUser());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+        FileUtils.downloadExcel(list, response);
     }
 }

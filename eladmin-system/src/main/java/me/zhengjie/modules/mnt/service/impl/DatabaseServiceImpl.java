@@ -25,7 +25,7 @@ import me.zhengjie.modules.mnt.service.dto.DatabaseDto;
 import me.zhengjie.modules.mnt.service.dto.DatabaseQueryCriteria;
 import me.zhengjie.modules.mnt.service.mapstruct.DatabaseMapper;
 import me.zhengjie.modules.mnt.util.SqlUtils;
-import me.zhengjie.utils.FileUtil;
+import me.zhengjie.utils.FileUtils;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
 import me.zhengjie.utils.ValidationUtil;
@@ -112,6 +112,6 @@ public class DatabaseServiceImpl implements DatabaseService {
             map.put("创建日期", databaseDto.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+        FileUtils.downloadExcel(list, response);
     }
 }
