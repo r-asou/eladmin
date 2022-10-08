@@ -38,6 +38,8 @@
         <druid.version>1.2.8</druid.version>
         <commons-pool2.version>2.11.1</commons-pool2.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
+        <sonar.organization>r-asou</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencies>

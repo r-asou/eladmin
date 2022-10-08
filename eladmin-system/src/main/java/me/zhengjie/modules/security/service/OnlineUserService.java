@@ -23,6 +23,8 @@ import me.zhengjie.utils.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -155,7 +157,7 @@ public class OnlineUserService {
      */
     public void checkLoginOnUser(String userName, String igoreToken){
         List<OnlineUserDto> onlineUserDtos = getAll(userName);
-        if(onlineUserDtos ==null || onlineUserDtos.isEmpty()){
+        if(CollectionUtils.isEmpty(onlineUserDtos)){
             return;
         }
         for(OnlineUserDto onlineUserDto : onlineUserDtos){

@@ -23,15 +23,21 @@ import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.StringUtils;
 import org.springframework.stereotype.Service;
 import oshi.SystemInfo;
-import oshi.hardware.*;
+import oshi.hardware.CentralProcessor;
+import oshi.hardware.GlobalMemory;
+import oshi.hardware.HardwareAbstractionLayer;
+import oshi.hardware.VirtualMemory;
 import oshi.software.os.FileSystem;
 import oshi.software.os.OSFileStore;
 import oshi.software.os.OperatingSystem;
 import oshi.util.FormatUtil;
 import oshi.util.Util;
+
 import java.lang.management.ManagementFactory;
 import java.text.DecimalFormat;
 import java.util.*;
+
+import static me.zhengjie.utils.enums.Constants.*;
 
 /**
 * @author Zheng Jie
@@ -50,16 +56,16 @@ public class MonitorServiceImpl implements MonitorService {
             OperatingSystem os = si.getOperatingSystem();
             HardwareAbstractionLayer hal = si.getHardware();
             // 系统信息
-            resultMap.put("sys", getSystemInfo(os));
+            resultMap.put(SYS, getSystemInfo(os));
             // cpu 信息
-            resultMap.put("cpu", getCpuInfo(hal.getProcessor()));
+            resultMap.put(CPU, getCpuInfo(hal.getProcessor()));
             // 内存信息
-            resultMap.put("memory", getMemoryInfo(hal.getMemory()));
+            resultMap.put(MEMORY, getMemoryInfo(hal.getMemory()));
             // 交换区信息
-            resultMap.put("swap", getSwapInfo(hal.getMemory()));
+            resultMap.put(SWAP, getSwapInfo(hal.getMemory()));
             // 磁盘
-            resultMap.put("disk", getDiskInfo(os));
-            resultMap.put("time", DateUtil.format(new Date(), "HH:mm:ss"));
+            resultMap.put(DISK, getDiskInfo(os));
+            resultMap.put(TIME, DateUtil.format(new Date(), "HH:mm:ss"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,13 +94,13 @@ public class MonitorServiceImpl implements MonitorService {
             }
         }
         long used = total - available;
-        diskInfo.put("total", total > 0 ? FileUtil.getSize(total) : "?");
-        diskInfo.put("available", FileUtil.getSize(available));
-        diskInfo.put("used", FileUtil.getSize(used));
+        diskInfo.put(TOTAL, total > 0 ? FileUtil.getSize(total) : "?");
+        diskInfo.put(AVAILABLE, FileUtil.getSize(available));
+        diskInfo.put(USED, FileUtil.getSize(used));
         if(total != 0){
-            diskInfo.put("usageRate", df.format(used/(double)total * 100));
+            diskInfo.put(USAGE_RATE, df.format(used/(double)total * 100));
         } else {
-            diskInfo.put("usageRate", 0);
+            diskInfo.put(USAGE_RATE, 0);
         }
         return diskInfo;
     }
@@ -109,13 +115,13 @@ public class MonitorServiceImpl implements MonitorService {
         VirtualMemory virtualMemory = memory.getVirtualMemory();
         long total = virtualMemory.getSwapTotal();
         long used = virtualMemory.getSwapUsed();
-        swapInfo.put("total", FormatUtil.formatBytes(total));
-        swapInfo.put("used", FormatUtil.formatBytes(used));
-        swapInfo.put("available", FormatUtil.formatBytes(total - used));
+        swapInfo.put(TOTAL, FormatUtil.formatBytes(total));
+        swapInfo.put(USED, FormatUtil.formatBytes(used));
+        swapInfo.put(AVAILABLE, FormatUtil.formatBytes(total - used));
         if(used == 0){
-            swapInfo.put("usageRate", 0);
+            swapInfo.put(USAGE_RATE, 0);
         } else {
-            swapInfo.put("usageRate", df.format(used/(double)total * 100));
+            swapInfo.put(USAGE_RATE, df.format(used/(double)total * 100));
         }
         return swapInfo;
     }
@@ -127,10 +133,10 @@ public class MonitorServiceImpl implements MonitorService {
      */
     private Map<String,Object> getMemoryInfo(GlobalMemory memory) {
         Map<String,Object> memoryInfo = new LinkedHashMap<>();
-        memoryInfo.put("total", FormatUtil.formatBytes(memory.getTotal()));
-        memoryInfo.put("available", FormatUtil.formatBytes(memory.getAvailable()));
-        memoryInfo.put("used", FormatUtil.formatBytes(memory.getTotal() - memory.getAvailable()));
-        memoryInfo.put("usageRate", df.format((memory.getTotal() - memory.getAvailable())/(double)memory.getTotal() * 100));
+        memoryInfo.put(TOTAL, FormatUtil.formatBytes(memory.getTotal()));
+        memoryInfo.put(AVAILABLE, FormatUtil.formatBytes(memory.getAvailable()));
+        memoryInfo.put(USED, FormatUtil.formatBytes(memory.getTotal() - memory.getAvailable()));
+        memoryInfo.put(USAGE_RATE, df.format((memory.getTotal() - memory.getAvailable())/(double)memory.getTotal() * 100));
         return memoryInfo;
     }
 
@@ -141,11 +147,11 @@ public class MonitorServiceImpl implements MonitorService {
      */
     private Map<String,Object> getCpuInfo(CentralProcessor processor) {
         Map<String,Object> cpuInfo = new LinkedHashMap<>();
-        cpuInfo.put("name", processor.getProcessorIdentifier().getName());
-        cpuInfo.put("package", processor.getPhysicalPackageCount() + "个物理CPU");
-        cpuInfo.put("core", processor.getPhysicalProcessorCount() + "个物理核心");
-        cpuInfo.put("coreNumber", processor.getPhysicalProcessorCount());
-        cpuInfo.put("logic", processor.getLogicalProcessorCount() + "个逻辑CPU");
+        cpuInfo.put(NAME, processor.getProcessorIdentifier().getName());
+        cpuInfo.put(PACKAGE, processor.getPhysicalPackageCount() + "个物理CPU");
+        cpuInfo.put(CORE, processor.getPhysicalProcessorCount() + "个物理核心");
+        cpuInfo.put(CORE_NUMBER, processor.getPhysicalProcessorCount());
+        cpuInfo.put(LOGIC, processor.getLogicalProcessorCount() + "个逻辑CPU");
         // CPU信息
         long[] prevTicks = processor.getSystemCpuLoadTicks();
         // 默认等待300毫秒...
@@ -166,8 +172,8 @@ public class MonitorServiceImpl implements MonitorService {
         long softirq = ticks[CentralProcessor.TickType.SOFTIRQ.getIndex()] - prevTicks[CentralProcessor.TickType.SOFTIRQ.getIndex()];
         long steal = ticks[CentralProcessor.TickType.STEAL.getIndex()] - prevTicks[CentralProcessor.TickType.STEAL.getIndex()];
         long totalCpu = user + nice + sys + idle + iowait + irq + softirq + steal;
-        cpuInfo.put("used", df.format(100d * user / totalCpu + 100d * sys / totalCpu));
-        cpuInfo.put("idle", df.format(100d * idle / totalCpu));
+        cpuInfo.put(USED, df.format(100d * user / totalCpu + 100d * sys / totalCpu));
+        cpuInfo.put(IDLE, df.format(100d * idle / totalCpu));
         return cpuInfo;
     }
 
@@ -184,9 +190,9 @@ public class MonitorServiceImpl implements MonitorService {
         // 计算项目运行时间
         String formatBetween = DateUtil.formatBetween(date, new Date(), Level.HOUR);
         // 系统信息
-        systemInfo.put("os", os.toString());
-        systemInfo.put("day", formatBetween);
-        systemInfo.put("ip", StringUtils.getLocalIp());
+        systemInfo.put(OS, os.toString());
+        systemInfo.put(DAY, formatBetween);
+        systemInfo.put(IP, StringUtils.getLocalIp());
         return systemInfo;
     }
 }
