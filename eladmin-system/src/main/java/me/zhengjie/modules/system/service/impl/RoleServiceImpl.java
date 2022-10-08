@@ -46,6 +46,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static cn.hutool.core.collection.CollUtil.isEmpty;
+import static cn.hutool.core.collection.CollUtil.isNotEmpty;
+
 /**
  * @author Zheng Jie
  * @date 2018-12-03
@@ -152,7 +155,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Integer findByRoles(Set<Role> roles) {
-        if (roles.size() == 0) {
+        if (isEmpty(roles)) {
             return Integer.MAX_VALUE;
         }
         Set<RoleDto> roleDtos = new HashSet<>();
@@ -211,8 +214,8 @@ public class RoleServiceImpl implements RoleService {
      * @param id /
      */
     public void delCaches(Long id, List<User> users) {
-        users = CollectionUtil.isEmpty(users) ? userRepository.findByRoleId(id) : users;
-        if (CollectionUtil.isNotEmpty(users)) {
+        users = isEmpty(users) ? userRepository.findByRoleId(id) : users;
+        if (isNotEmpty(users)) {
             users.forEach(item -> userCacheManager.cleanUserCache(item.getUsername()));
             Set<Long> userIds = users.stream().map(User::getId).collect(Collectors.toSet());
             redisUtils.delByKeys(CacheKey.DATA_USER, userIds);

@@ -40,6 +40,7 @@ import java.util.Enumeration;
 @Slf4j
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
+    private StringUtils() {}
     private static final char SEPARATOR = '_';
     private static final String UNKNOWN = "unknown";
 

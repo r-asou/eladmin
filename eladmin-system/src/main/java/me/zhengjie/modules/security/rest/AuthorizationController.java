@@ -31,13 +31,13 @@ import me.zhengjie.modules.security.config.bean.LoginCodeEnum;
 import me.zhengjie.modules.security.config.bean.LoginProperties;
 import me.zhengjie.modules.security.config.bean.SecurityProperties;
 import me.zhengjie.modules.security.security.TokenProvider;
+import me.zhengjie.modules.security.service.OnlineUserService;
 import me.zhengjie.modules.security.service.dto.AuthUserDto;
 import me.zhengjie.modules.security.service.dto.JwtUserDto;
-import me.zhengjie.modules.security.service.OnlineUserService;
-import me.zhengjie.utils.RsaUtils;
 import me.zhengjie.utils.RedisUtils;
+import me.zhengjie.utils.RsaUtils;
 import me.zhengjie.utils.SecurityUtils;
-import me.zhengjie.utils.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -45,7 +45,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -100,10 +104,9 @@ public class AuthorizationController {
         // 保存在线信息
         onlineUserService.save(jwtUserDto, token, request);
         // 返回 token 与 用户信息
-        Map<String, Object> authInfo = new HashMap<String, Object>(2) {{
-            put("token", properties.getTokenStartWith() + token);
-            put("user", jwtUserDto);
-        }};
+        Map<String, Object> authInfo = new HashMap<>(2);
+        authInfo.put("token", properties.getTokenStartWith() + token);
+        authInfo.put("user", jwtUserDto);
         if (loginProperties.isSingleLogin()) {
             //踢掉之前已经登录的token
             onlineUserService.checkLoginOnUser(authUser.getUsername(), token);
@@ -131,10 +134,9 @@ public class AuthorizationController {
         // 保存
         redisUtils.set(uuid, captchaValue, loginProperties.getLoginCode().getExpiration(), TimeUnit.MINUTES);
         // 验证码信息
-        Map<String, Object> imgResult = new HashMap<String, Object>(2) {{
-            put("img", captcha.toBase64());
-            put("uuid", uuid);
-        }};
+        Map<String, Object> imgResult = new HashMap<>(2);
+        imgResult.put("img", captcha.toBase64());
+        imgResult.put("uuid", uuid);
         return ResponseEntity.ok(imgResult);
     }
 

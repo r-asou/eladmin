@@ -36,6 +36,7 @@ import java.util.List;
 @Slf4j
 public class SecurityUtils {
 
+    private SecurityUtils() {}
     /**
      * 获取当前登录的用户
      * @return UserDetails
@@ -87,7 +88,7 @@ public class SecurityUtils {
      */
     public static String getDataScopeType() {
         List<Long> dataScopes = getCurrentUserDataScope();
-        if(dataScopes.size() != 0){
+        if(!dataScopes.isEmpty()){
             return "";
         }
         return DataScopeEnum.ALL.getValue();

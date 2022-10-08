@@ -1,5 +1,6 @@
 package me.zhengjie.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
@@ -14,38 +15,39 @@ import java.security.spec.X509EncodedKeySpec;
  * @description Rsa 工具类，公钥私钥生成，加解密
  * @date 2020-05-18
  **/
+@Slf4j
 public class RsaUtils {
 
     private static final String SRC = "123456";
 
     public static void main(String[] args) throws Exception {
-        System.out.println("\n");
+        log.info("\n");
         RsaKeyPair keyPair = generateKeyPair();
-        System.out.println("公钥：" + keyPair.getPublicKey());
-        System.out.println("私钥：" + keyPair.getPrivateKey());
-        System.out.println("\n");
+        log.info("公钥：{}", keyPair.getPublicKey());
+        log.info("私钥：{}", keyPair.getPrivateKey());
+        log.info("\n");
         test1(keyPair);
-        System.out.println("\n");
+        log.info("\n");
         test2(keyPair);
-        System.out.println("\n");
+        log.info("\n");
     }
 
     /**
      * 公钥加密私钥解密
      */
     private static void test1(RsaKeyPair keyPair) throws Exception {
-        System.out.println("***************** 公钥加密私钥解密开始 *****************");
+        log.info("***************** 公钥加密私钥解密开始 *****************");
         String text1 = encryptByPublicKey(keyPair.getPublicKey(), RsaUtils.SRC);
         String text2 = decryptByPrivateKey(keyPair.getPrivateKey(), text1);
-        System.out.println("加密前：" + RsaUtils.SRC);
-        System.out.println("加密后：" + text1);
-        System.out.println("解密后：" + text2);
+        log.info("加密前：{}", RsaUtils.SRC);
+        log.info("加密后：{}", text1);
+        log.info("解密后：{}", text2);
         if (RsaUtils.SRC.equals(text2)) {
-            System.out.println("解密字符串和原始字符串一致，解密成功");
+            log.info("解密字符串和原始字符串一致，解密成功");
         } else {
-            System.out.println("解密字符串和原始字符串不一致，解密失败");
+            log.info("解密字符串和原始字符串不一致，解密失败");
         }
-        System.out.println("***************** 公钥加密私钥解密结束 *****************");
+        log.info("***************** 公钥加密私钥解密结束 *****************");
     }
 
     /**
@@ -53,18 +55,18 @@ public class RsaUtils {
      * @throws Exception /
      */
     private static void test2(RsaKeyPair keyPair) throws Exception {
-        System.out.println("***************** 私钥加密公钥解密开始 *****************");
+        log.info("***************** 私钥加密公钥解密开始 *****************");
         String text1 = encryptByPrivateKey(keyPair.getPrivateKey(), RsaUtils.SRC);
         String text2 = decryptByPublicKey(keyPair.getPublicKey(), text1);
-        System.out.println("加密前：" + RsaUtils.SRC);
-        System.out.println("加密后：" + text1);
-        System.out.println("解密后：" + text2);
+        log.info("加密前：{}", RsaUtils.SRC);
+        log.info("加密后：{}", text1);
+        log.info("解密后：{}", text2);
         if (RsaUtils.SRC.equals(text2)) {
-            System.out.println("解密字符串和原始字符串一致，解密成功");
+            log.info("解密字符串和原始字符串一致，解密成功");
         } else {
-            System.out.println("解密字符串和原始字符串不一致，解密失败");
+            log.info("解密字符串和原始字符串不一致，解密失败");
         }
-        System.out.println("***************** 私钥加密公钥解密结束 *****************");
+        log.info("***************** 私钥加密公钥解密结束 *****************");
     }
 
     /**

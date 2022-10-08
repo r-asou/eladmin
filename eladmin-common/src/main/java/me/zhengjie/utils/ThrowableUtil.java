@@ -24,6 +24,7 @@ import java.io.StringWriter;
  */
 public class ThrowableUtil {
 
+    private ThrowableUtil (){}
     /**
      * 获取堆栈信息
      */
