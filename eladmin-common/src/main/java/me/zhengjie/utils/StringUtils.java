@@ -20,6 +20,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import me.zhengjie.config.ElAdminProperties;
+import me.zhengjie.utils.enums.Constants;
 import net.dreamlu.mica.ip2region.core.Ip2regionSearcher;
 import net.dreamlu.mica.ip2region.core.IpInfo;
 import nl.basjes.parse.useragent.UserAgent;
@@ -185,7 +186,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * 根据ip获取详细地址
      */
     public static String getHttpCityInfo(String ip) {
-        String api = String.format(ElAdminConstant.Url.IP_URL, ip);
+        String api = String.format(Constants.IP_URL, ip);
         JSONObject object = JSONUtil.parseObj(HttpUtil.get(api));
         return object.get("addr", String.class);
     }

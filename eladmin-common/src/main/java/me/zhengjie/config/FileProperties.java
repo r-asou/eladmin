@@ -16,7 +16,7 @@
 package me.zhengjie.config;
 
 import lombok.Data;
-import me.zhengjie.utils.ElAdminConstant;
+import me.zhengjie.utils.enums.Constants;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -42,9 +42,9 @@ public class FileProperties {
 
     public ElPath getPath(){
         String os = System.getProperty("os.name");
-        if(os.toLowerCase().startsWith(ElAdminConstant.WIN)) {
+        if(os.toLowerCase().startsWith(Constants.WIN)) {
             return windows;
-        } else if(os.toLowerCase().startsWith(ElAdminConstant.MAC)){
+        } else if(os.toLowerCase().startsWith(Constants.MAC)){
             return mac;
         }
         return linux;

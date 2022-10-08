@@ -21,4 +21,12 @@ public interface Constants {
     String CORE = "core";
     String CORE_NUMBER = "coreNumber";
     String LOGIC = "logic";
+
+    String REGION = "内网IP|内网IP";
+
+    String WIN = "win";
+
+    String MAC = "mac";
+
+    String IP_URL = "https://whois.pconline.com.cn/ipJson.jsp?ip=%s&json=true";
 }
